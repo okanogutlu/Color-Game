@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <title>Title</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="style.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    
+    
+    </head>
+      <body>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+      
+        <div style="min-width: 100%;" class="container">
+
+
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div  class="modal-dialog">
+                  <div style="background-color:rgb(207, 160, 160)" class="modal-content">
+                    <div class="modal-header">
+                      <h4 style="font-size: 50px;" class="modal-title" id="myModalLabel">Time Is Up!</h4>
+                      <h3 class=modal-title>Score <p id="popupskor"></p></h3>
+                    </div>
+                    <div style="background-color: rgb(221, 190, 190);" class="modal-body">
+                      You can close this tag and start a new game for a better performance!
+                    </div>
+                    <div class="modal-footer">
+                      <button id="closeButton" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <div class="row ">
+                
+                <div style="display:inline ;padding-left: 23%; margin-bottom:0px;" id="area" class="col-sm-6 col-md-5">
+                    <p style="text-align:start; margin-bottom:0px;"><b>FIND THE COLOR</b></p>
+                    <div id="generalArea">
+                    </div>
+                </div>
+
+                <div  class="col-sm-7 col-md-3 offset-md-4">
+                    <div class=" right center border shadow  col-md-6 pb-3 mb-3 mt-2 pt-4">
+                        <p><b>TIMER</b></p>
+                        <div class="center score border">
+                                <p id="count">60</p> Seconds
+                        </div>
+                    </div>
+                    <div class="right border shadow center col-md-offset-8 col-md-6 pb-3 pt-4 mb-3 mt-1">
+                        <p><b>THE COLOR</b></p>
+                       <div id="target" class="center box"></div>
+                    </div>
+                    
+                    <div class="right center col-md-offset-8 border shadow  col-md-6 pb-3 pt-4 mb-3 mt-1">
+                        <p><b>LEVELS</b></p>
+                        <button id="easybutton" type="button" class=" m-2 w-50 btn btn-primary">9X9</button>
+                        <button id="mediumbutton" type="button" class=" m-2 w-50 btn btn-info">16X16</button>
+                        <button id="hardestbutton" type="button" class=" m-2 w-50 btn btn-danger">25X25</button>
+                    </div>
+                    
+                    <div class=" right center border shadow  col-md-6 pb-3 mb-3 mt-1 pt-4">
+                        <p><b>SCORE</b></p>
+                        <div class="center score border">
+                               <h3 id="score">0</h3>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+        </div>
+    
+    <script type="text/javascript">
+    
+    var hexDigits = new Array("0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"); 
+    var targetcolor="";
+    var currentGameType=null;
+    var score = 0;
+    let SelectedColors=[];
+    var temp = "";
+    var counter = 60;
+    var interval;
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+    
+    function rgb2hex(rgb) {
+        rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+}
+
+    function hex(x) {
+  return isNaN(x) ? "00" : hexDigits[(x - x % 16) / 16] + hexDigits[x % 16];
+ }
+    
+    function nineToNineTableGenerator(){
+        $("#generalArea").empty();
+        temp = "";
+        SelectedColors=[];
+        for (let i = 0; i < 9; i++) {
+            temp += '<table> <tr>';
+            for (let j = 0; j < 9; j++){
+                let item = getRandomColor();
+                SelectedColors.push(item);
+                temp += '<th> <button type="button" class="box boxes" style="background-color:' + item + '"></button> </th>';
+            }
+            temp+="</tr>";
+        }
+        temp+="</table>";
+    $("#generalArea").append(temp);
+    targetcolor = SelectedColors[Math.floor(Math.random() * 81)];
+    $("#target").css("background-color", targetcolor);
+   
+    }
+
+    function sixteenToSixteenTableGenerator(){
+        $("#generalArea").empty();
+        temp = "";
+        SelectedColors=[];
+        for (let i = 0; i < 16; i++) {
+            temp += '<table> <tr>';
+            for (let j = 0; j < 16; j++){
+                let item = getRandomColor();
+                SelectedColors.push(item);
+                temp += '<th> <button type="button" class="box boxes" style="background-color:' + item + '"></button> </th>';
+            }
+            temp+="</tr>";
+        }
+        temp+="</table>";
+    $("#generalArea").append(temp);
+    targetcolor = SelectedColors[Math.floor(Math.random() * 256)];
+    $("#target").css("background-color", targetcolor);
+    }
+
+    function twentfiveToTwentyfiveTableGenerator(){
+        $("#generalArea").empty();
+        temp = "";
+        SelectedColors=[];
+        for (let i = 0; i < 25; i++) {
+            temp += '<table> <tr>';
+            for (let j = 0; j < 25; j++){
+                let item = getRandomColor();
+                SelectedColors.push(item);
+                temp += '<th> <button type="button" class="box boxes" style="background-color:' + item + '"></button> </th>';
+            }
+            temp+="</tr>";
+        }
+        temp+="</table>";
+    $("#generalArea").append(temp);
+    targetcolor = SelectedColors[Math.floor(Math.random() * 625)];
+    $("#target").css("background-color", targetcolor);
+    }
+
+    function startTheTime(){
+        clearInterval(interval);
+        interval=setInterval(function(){
+            counter--;
+                if(counter >=0){
+                    id = document.getElementById("count");
+                    id.innerHTML = counter;
+                }else{
+                    
+                    $('#myModal').modal();
+                    $('#popupskor').text(score);
+                
+                }
+        },1000);
+    }
+    function ResetScore(){
+        score = 0;
+        $("#score").text(score);
+    }
+    $(function () {
+        $("#easybutton").click(function(){nineToNineTableGenerator();startTheTime();currentGameType=9;counter=60;ResetScore()});
+        $("#mediumbutton").click(function(){sixteenToSixteenTableGenerator();startTheTime();currentGameType=16;counter=60;ResetScore()});
+        $("#hardestbutton").click(function(){twentfiveToTwentyfiveTableGenerator();startTheTime();currentGameType=25;counter=60;ResetScore()});
+        $('#closeButton').click(function(){location.reload();});
+    });
+
+    $(document).on('click', '.boxes' ,function (event) {
+        var buttonColorHex = rgb2hex(this.style.backgroundColor);
+        var buttonColorHexUpper=buttonColorHex.toUpperCase();
+        if(buttonColorHexUpper==targetcolor){
+            $("#score").text(++score);
+            switch (currentGameType) {
+                case 9:
+                    nineToNineTableGenerator();
+                    break;
+                case 16:
+                    sixteenToSixteenTableGenerator();
+                    break;
+                case 25:
+                    twentfiveToTwentyfiveTableGenerator();
+                    break;
+                default:
+                    break;
+            }
+        }
+      
+        
+    });
+    </script>
+    </body>
+    </html>
+
+    
